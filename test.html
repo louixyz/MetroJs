@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<canvas id="canvas" width="1000" height="600" style="border: 2px solid darkcyan"></canvas>
+<script src="js/train.js"></script>
+<script src="js/station.js"></script>
+<script src="js/track.js"></script>
+<script>
+    window.onload = function () {
+
+        function animation() {
+            window.requestAnimationFrame(animation);
+            var t1 = (new Date().getSeconds());
+            console.log("t1:" + t1);
+            window.setTimeout(function () {
+                var t2 = (new Date().getSeconds());
+                console.log("t2:" + t2)
+            }, 2000)
+        }
+        animation();
+    };
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MetroGo</title>
+</head>
+<body>
+<canvas id="canvas" width="1000" height="600" style="border: 2px solid darkcyan"></canvas>
+<script src="js/train.js"></script>
+<script src="js/station.js"></script>
+<script src="js/track.js"></script>
+<script src="js/clock.js"></script>
+<script>
+    window.onload = function () {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var clock = new Clock();
+        var track1 = new Track(0, 100);
+        var track2 = new Track(0, 200);
+        var train1 = new Train(48, 100);
+        var station0 = new Station();
+        station0.x = 80;
+        station0.y = 80;
+
+        var stations = [];
+        var loc_station = [[150, 80], [220, 80], [400, 80], [550, 80], [600, 80], [800, 80],
+            [150, 210], [220, 210], [400, 210], [550, 210], [600, 210], [800, 210]];
+        var stall_time = [1000, 2000, 1000, 3000, 5000, 1000];
+        var num_station = loc_station.length; // 车站数量
+        for (var i = 0; i < num_station; i++) {
+            var sid = i;
+            var station = new Station(sid);
+            station.x = loc_station[i][0];
+            station.y = loc_station[i][1];
+            station.t = stall_time[i];
+            stations.push(station)
+
+        }
+
+
+        function drawFrame() {
+            window.requestAnimationFrame(drawFrame);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var time = new Date();
+            clock.draw(ctx, canvas, time.getMinutes(), time.getSeconds());
+            track1.draw(ctx, canvas);
+            track2.draw(ctx, canvas);
+            // station0.draw(ctx);
+            for (var i = 0; i < stations.length; i++) {
+                stations[i].draw(ctx);
+            }
+
+            train1.draw(ctx);
+            train1.move(ctx);
+            train1.park(ctx, stations);
+        }
+
+        drawFrame();
+
+    };
+
+
+</script>
+</body>
+</html>
