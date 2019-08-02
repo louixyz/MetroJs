@@ -1,5 +1,6 @@
-function Train(x, y) {
-    this.ready = false;
+function Train(x, y, id) {
+    this.trainReady = false;
+    this.detrain = false;
     if (x === undefined) {
         this.x = 0;
     } else {
@@ -10,8 +11,15 @@ function Train(x, y) {
     } else {
         this.y = y;
     }
+    if (id === undefined) {
+        this.id = 0;
+    } else {
+        this.id = id;
+    }
     this.len = 20;
     this.wid = 10;
+    this.head = this.x + this.len;
+    this.tail = this.x;
     this.vx = 0;
     this.vy = 0;
     this.num = 100;
@@ -40,7 +48,7 @@ Train.prototype.draw = function (context) {
 
 Train.prototype.move = function (context, direction) {
     context.save();
-    if (this.pullin === 0) {
+    if (this.trainReady === true && this.pullin === 0 && this.detrain === false) {
         if (direction === undefined) {
             this.vx = 1;
             this.vy = 0;
@@ -77,3 +85,5 @@ Train.prototype.park = function (context, stations) {
     context.restore();
 
 };
+
+

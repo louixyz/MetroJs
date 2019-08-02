@@ -18,7 +18,8 @@
         var clock = new Clock();
         var track1 = new Track(0, 100);
         var track2 = new Track(0, 200);
-        var train1 = new Train(48, 100);
+        var train0 = new Train(48, 100);
+        train0.trainReady = true;
         var station0 = new Station();
         station0.x = 80;
         station0.y = 80;
@@ -28,15 +29,113 @@
             [150, 210], [220, 210], [400, 210], [550, 210], [600, 210], [800, 210]];
         var stall_time = [1000, 2000, 1000, 3000, 5000, 1000];
         var num_station = loc_station.length; // 车站数量
-        for (var i = 0; i < num_station; i++) {
+        for (let i = 0; i < num_station; i++) {
             var sid = i;
             var station = new Station(sid);
             station.x = loc_station[i][0];
             station.y = loc_station[i][1];
             station.t = stall_time[i];
-            stations.push(station)
+            stations.push(station);
 
         }
+
+        var trains = [];
+        var trains_num = 10;
+        for (let j = 0; j < trains_num; j++){
+            var tid = j;
+            var train = new Train(10, 100, tid);
+            trains.push(train);
+        }
+        window.addEventListener('keydown', function (event) {
+            console.log(event.keyCode);
+            switch (event.keyCode) {
+                case 49:
+                    trains[0].trainReady = true;
+                    trains[0].num = 101;
+                    trains[0].x = 0;
+                    break;
+                case 50:
+                    trains[1].trainReady = true;
+                    trains[1].num = 102;
+                    trains[1].x = 0;
+                    break;
+                case 51:
+                    trains[2].trainReady = true;
+                    trains[2].num = 103;
+                    trains[2].x = 0;
+                    break;
+                case 52:
+                    trains[3].trainReady = true;
+                    trains[3].num = 104;
+                    trains[3].x = 0;
+                    break;
+                case 53:
+                    trains[4].trainReady = true;
+                    trains[4].num = 105;
+                    trains[4].x = 0;
+                    break;
+                case 54:
+                    trains[5].trainReady = true;
+                    trains[5].num = 106;
+                    trains[5].x = 0;
+                    break;
+                case 97:
+                    if (trains[0].vx > 0) {
+                        trains[0].vx = 0;
+                        trains[0].detrain = true;
+                    } else {
+                        trains[0].vx = 1;
+                        trains[0].detrain = false;
+                    }
+                    break;
+                case 98:
+                    if (trains[1].vx > 0) {
+                        trains[1].vx = 0;
+                        trains[1].detrain = true;
+                    } else {
+                        trains[1].vx = 1;
+                        trains[1].detrain = false;
+                    }
+                    break;
+                case 99:
+                    if (trains[2].vx > 0) {
+                        trains[2].vx = 0;
+                        trains[2].detrain = true;
+                    } else {
+                        trains[2].vx = 1;
+                        trains[2].detrain = false;
+                    }
+                    break;
+                case 100:
+                    if (trains[3].vx > 0) {
+                        trains[3].vx = 0;
+                        trains[3].detrain = true;
+                    } else {
+                        trains[3].vx = 1;
+                        trains[3].detrain = false;
+                    }
+                    break;
+                case 101:
+                    if (trains[4].vx > 0) {
+                        trains[4].vx = 0;
+                        trains[4].detrain = true;
+                    } else {
+                        trains[4].vx = 1;
+                        trains[4].detrain = false;
+                    }
+                    break;
+                case 102:
+                    if (trains[5].vx > 0) {
+                        trains[5].vx = 0;
+                        trains[5].detrain = true;
+                    } else {
+                        trains[5].vx = 1;
+                        trains[5].detrain = false;
+                    }
+                    break;
+            }
+
+        });
 
 
         function drawFrame() {
@@ -47,13 +146,18 @@
             track1.draw(ctx, canvas);
             track2.draw(ctx, canvas);
             // station0.draw(ctx);
-            for (var i = 0; i < stations.length; i++) {
+            for (let i = 0; i < stations.length; i++) {
                 stations[i].draw(ctx);
             }
+            for(let j = 0; j < trains_num; j++){
+                trains[j].draw(ctx);
+                trains[j].move(ctx);
+                trains[j].park(ctx, stations)
+            }
 
-            train1.draw(ctx);
-            train1.move(ctx);
-            train1.park(ctx, stations);
+            // train0.draw(ctx);
+            // train0.move(ctx);
+            // train0.park(ctx, stations);
         }
 
         drawFrame();
