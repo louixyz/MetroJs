@@ -5,7 +5,7 @@
     <title>MetroGo</title>
 </head>
 <body>
-<canvas id="canvas" width="1000" height="600" style="border: 2px solid darkcyan"></canvas>
+<canvas id="canvas" width="1500" height="600" style="border: 2px solid darkcyan"></canvas>
 <script src="js/train.js"></script>
 <script src="js/station.js"></script>
 <script src="js/track.js"></script>
@@ -18,14 +18,15 @@
         var clock = new Clock();
         var track1 = new Track(0, 100);
         var track2 = new Track(0, 200);
-        var train0 = new Train(48, 100);
+        var train0 = new Train(0, 0);
         train0.trainReady = true;
         var station0 = new Station();
         station0.x = 80;
         station0.y = 80;
 
+
         var stations = [];
-        var loc_station = [[150, 80], [220, 80], [400, 80], [550, 80], [600, 80], [800, 80],
+        var loc_station = [[350, 80], [620, 80], [800, 80], [1050, 80], [1200, 80], [1500, 80],
             [150, 210], [220, 210], [400, 210], [550, 210], [600, 210], [800, 210]];
         var stall_time = [1000, 2000, 1000, 3000, 5000, 1000];
         var num_station = loc_station.length; // 车站数量
@@ -40,44 +41,62 @@
         }
 
         var trains = [];
-        var trains_num = 10;
-        for (let j = 0; j < trains_num; j++){
+        var trains_num = 6; // 列车数量
+        for (let j = 0; j < trains_num; j++) {
             var tid = j;
             var train = new Train(10, 100, tid);
+            train.num = 101 + j;
             trains.push(train);
         }
+
+        var trainList = [];
+        trainList.push(train0);
+
         window.addEventListener('keydown', function (event) {
-            console.log(event.keyCode);
+            // console.log(event.keyCode);
             switch (event.keyCode) {
                 case 49:
                     trains[0].trainReady = true;
-                    trains[0].num = 101;
-                    trains[0].x = 0;
+                    trains[0].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[0]);
+
+                    // console.log(trains[0].formerId);
                     break;
                 case 50:
                     trains[1].trainReady = true;
-                    trains[1].num = 102;
-                    trains[1].x = 0;
+                    trains[1].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[1]);
+
+                    // console.log(trains[1].formerId);
                     break;
                 case 51:
                     trains[2].trainReady = true;
-                    trains[2].num = 103;
-                    trains[2].x = 0;
+                    trains[2].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[2]);
+
+                    // console.log(trains[2].formerId);
                     break;
                 case 52:
                     trains[3].trainReady = true;
-                    trains[3].num = 104;
-                    trains[3].x = 0;
+                    trains[3].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[3]);
+
+                    // console.log(trains[3].formerId);
                     break;
                 case 53:
                     trains[4].trainReady = true;
-                    trains[4].num = 105;
-                    trains[4].x = 0;
+                    trains[4].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[4]);
+
+                    // console.log(trains[4].formerId);
                     break;
                 case 54:
                     trains[5].trainReady = true;
                     trains[5].num = 106;
-                    trains[5].x = 0;
+                    trains[5].formerId = trainList[trainList.length - 1].id;
+                    trainList.push(trains[5]);
+
+                    // console.log(trains[5].formerId);
                     break;
                 case 97:
                     if (trains[0].vx > 0) {
@@ -86,6 +105,7 @@
                     } else {
                         trains[0].vx = 1;
                         trains[0].detrain = false;
+                        trains[0].haltId = 0;
                     }
                     break;
                 case 98:
@@ -95,6 +115,7 @@
                     } else {
                         trains[1].vx = 1;
                         trains[1].detrain = false;
+                        trains[1].haltId = 0;
                     }
                     break;
                 case 99:
@@ -104,6 +125,7 @@
                     } else {
                         trains[2].vx = 1;
                         trains[2].detrain = false;
+                        trains[2].haltId = 0;
                     }
                     break;
                 case 100:
@@ -113,6 +135,7 @@
                     } else {
                         trains[3].vx = 1;
                         trains[3].detrain = false;
+                        trains[3].haltId = 0;
                     }
                     break;
                 case 101:
@@ -122,6 +145,8 @@
                     } else {
                         trains[4].vx = 1;
                         trains[4].detrain = false;
+                        trains[4].haltId = 0;
+
                     }
                     break;
                 case 102:
@@ -131,12 +156,25 @@
                     } else {
                         trains[5].vx = 1;
                         trains[5].detrain = false;
+                        trains[5].haltId = 0;
                     }
                     break;
             }
 
         });
 
+        function collision(trains) {
+            for (let k = 0; k < trains.length; k++) {
+                if (trains[k].trainReady === true && trains[k].formerId !== 6) {
+                    if (trains[k].x + trains[k].len + trains[k].clearance > trains[trains[k].formerId].x) {
+                        console.log('hit');
+                        trains[k].halt(ctx);
+                    }
+
+                }
+
+            }
+        }
 
         function drawFrame() {
             window.requestAnimationFrame(drawFrame);
@@ -149,11 +187,12 @@
             for (let i = 0; i < stations.length; i++) {
                 stations[i].draw(ctx);
             }
-            for(let j = 0; j < trains_num; j++){
+            for (let j = 0; j < trains_num; j++) {
                 trains[j].draw(ctx);
                 trains[j].move(ctx);
                 trains[j].park(ctx, stations)
             }
+            collision(trains);
 
             // train0.draw(ctx);
             // train0.move(ctx);

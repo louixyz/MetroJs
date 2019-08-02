@@ -1,4 +1,9 @@
 function Train(x, y, id) {
+    if (id === undefined) {
+        this.id = 6;
+    } else {
+        this.id = id;
+    }
     this.trainReady = false;
     this.detrain = false;
     if (x === undefined) {
@@ -11,20 +16,16 @@ function Train(x, y, id) {
     } else {
         this.y = y;
     }
-    if (id === undefined) {
-        this.id = 0;
-    } else {
-        this.id = id;
-    }
     this.len = 20;
     this.wid = 10;
-    this.head = this.x + this.len;
-    this.tail = this.x;
     this.vx = 0;
     this.vy = 0;
     this.num = 100;
     this.pullin = 0;
     this.t = 2;
+    this.formerId = undefined;
+    this.haltId = 0;
+    this.clearance = 50;
 
 }
 
@@ -48,12 +49,12 @@ Train.prototype.draw = function (context) {
 
 Train.prototype.move = function (context, direction) {
     context.save();
-    if (this.trainReady === true && this.pullin === 0 && this.detrain === false) {
+    if (this.trainReady === true && this.pullin === 0 && this.detrain === false && this.haltId === 0) {
         if (direction === undefined) {
             this.vx = 1;
             this.vy = 0;
         }
-    } else if (this.pullin === 1) {
+    } else if (this.pullin === 1 || this.haltId === 1) {
         this.vx = 0;
         this.vy = 0;
     }
@@ -68,11 +69,11 @@ Train.prototype.park = function (context, stations) {
     context.save();
     for (let i = 0; i < stations.length; i++) {
         if (this.x === stations[i].x && this.y === stations[i].y + stations[i].h) {
-            console.log('pullIn');
+            // console.log('pullIn');
             this.pullin = 1;
-            var that = this;
+            let that = this;
             window.setTimeout(function () {
-                console.log(that);
+                // console.log(that);
                 that.vx = 1;
                 that.pullin = 0;
             }, stations[i].t);
@@ -86,4 +87,17 @@ Train.prototype.park = function (context, stations) {
 
 };
 
+Train.prototype.halt = function (context) {
+    context.save();
+    console.log('halt');
+    this.haltId = 1;
+    // let that = this;
+    // window.setTimeout(function () {
+    //     // console.log(that);
+    //     that.vx = 1;
+    //     that.haltId = 0;
+    // }, 10000);
+    // // this.x += 1;
+    context.restore();
+};
 
