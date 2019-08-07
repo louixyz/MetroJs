@@ -5,7 +5,9 @@
     <title>MetroGo</title>
 </head>
 <body>
-<canvas id="canvas" width="1500" height="600" style="border: 2px solid darkcyan"></canvas>
+<canvas id="canvas" width="1200px" height="600px"
+        style="border: 2px solid darkcyan; display:inline-block; float: left;"></canvas>
+<p style=" display: inline-block; float:left">hello</p>
 <script src="js/train.js"></script>
 <script src="js/station.js"></script>
 <script src="js/track.js"></script>
@@ -26,7 +28,7 @@
 
 
         var stations = [];
-        var loc_station = [[350, 80], [620, 80], [800, 80], [1050, 80], [1200, 80], [1500, 80],
+        var loc_station = [[150, 80], [320, 80], [500, 80], [850, 80], [1000, 80], [1100, 80],
             [150, 210], [220, 210], [400, 210], [550, 210], [600, 210], [800, 210]];
         var stall_time = [1000, 2000, 1000, 3000, 5000, 1000];
         var num_station = loc_station.length; // 车站数量
@@ -41,8 +43,8 @@
         }
 
         var trains = [];
-        var trains_num = 6; // 列车数量
-        for (let j = 0; j < trains_num; j++) {
+        var num_train = 6; // 列车数量
+        for (let j = 0; j < num_train; j++) {
             var tid = j;
             var train = new Train(10, 100, tid);
             train.num = 101 + j;
@@ -54,6 +56,7 @@
 
         window.addEventListener('keydown', function (event) {
             // console.log(event.keyCode);
+            // for(let i = 49; i<tr)
             switch (event.keyCode) {
                 case 49:
                     trains[0].trainReady = true;
@@ -187,7 +190,7 @@
             for (let i = 0; i < stations.length; i++) {
                 stations[i].draw(ctx);
             }
-            for (let j = 0; j < trains_num; j++) {
+            for (let j = 0; j < num_train; j++) {
                 trains[j].draw(ctx);
                 trains[j].move(ctx);
                 trains[j].park(ctx, stations)
