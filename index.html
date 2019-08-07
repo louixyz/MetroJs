@@ -3,11 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>MetroGo</title>
+    <style>
+        p{
+            position: absolute;
+            top:0;
+            left: 1220px;
+            padding: 5px;
+            width: 100px;
+            background: #eeeeee;
+
+        }
+    </style>
 </head>
 <body>
 <canvas id="canvas" width="1200px" height="600px"
         style="border: 2px solid darkcyan; display:inline-block; float: left;"></canvas>
-<p style=" display: inline-block; float:left">hello</p>
+<!--<p style=" display: inline-block; float:left">hello</p>-->
+<p id="log">null</p>
 <script src="js/train.js"></script>
 <script src="js/station.js"></script>
 <script src="js/track.js"></script>
@@ -16,6 +28,7 @@
     window.onload = function () {
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
+        var log = document.getElementById('log');
 
         var clock = new Clock();
         var track1 = new Track(0, 100);
@@ -171,7 +184,7 @@
                 if (trains[k].trainReady === true && trains[k].formerId !== 6) {
                     if (trains[k].x + trains[k].len + trains[k].clearance > trains[trains[k].formerId].x) {
                         console.log('hit');
-                        trains[k].halt(ctx);
+                        trains[k].halt(ctx, log);
                     }
 
                 }

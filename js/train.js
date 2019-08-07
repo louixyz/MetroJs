@@ -25,7 +25,9 @@ function Train(x, y, id) {
     this.t = 2;
     this.formerId = undefined;
     this.haltId = 0;
-    this.clearance = 50;
+    this.clearance = 50; // 安全距离
+    this.soc = 100; // 剩余电量
+
 
 }
 
@@ -87,17 +89,11 @@ Train.prototype.park = function (context, stations) {
 
 };
 
-Train.prototype.halt = function (context) {
+Train.prototype.halt = function (context, log) {
     context.save();
     console.log('halt');
     this.haltId = 1;
-    // let that = this;
-    // window.setTimeout(function () {
-    //     // console.log(that);
-    //     that.vx = 1;
-    //     that.haltId = 0;
-    // }, 10000);
-    // // this.x += 1;
+    log.innerHTML = this.num  + ' STOP' +"<br/>";
     context.restore();
 };
 
